@@ -5,7 +5,7 @@ A Slack bot with three slash commands:
 | Command | What it does |
 | --- | --- |
 | `/joinprvt` | Sends you (the owner) a DM with **Accept** / **Decline** buttons. On accept, the requester is invited to your private channel. |
-| `/join` | Adds the user who ran it to your public channel. |
+| `/joinc` | Adds the user who ran it to your public channel. |
 | `/movierequest <title>` | Adds a movie to a shared request list. `/movierequest` or `/movierequest list` shows the list. Duplicates are ignored. |
 | `/ask <question>` | Asks the chatbot a question. |
 

@@ -91,7 +91,7 @@ async function handleJoinPrivateDecision({ action, body, client, config, store }
   };
 }
 
-/** /join — add the requesting user to the public channel. */
+/** /joinc — add the requesting user to the public channel. */
 async function handleJoinPublic({ command, client, config }) {
   try {
     await client.conversations.invite({

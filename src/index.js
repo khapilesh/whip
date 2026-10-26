@@ -49,13 +49,13 @@ async function handleDecision({ ack, action, body, client, respond }) {
   }
 }
 
-app.command('/join', async ({ command, ack, client, respond }) => {
+app.command('/joinc', async ({ command, ack, client, respond }) => {
   await ack();
   try {
     const result = await handlers.handleJoinPublic({ command, client, config });
     await respond({ response_type: 'ephemeral', text: result.text });
   } catch (err) {
-    console.error('/join failed:', err);
+    console.error('/joinc failed:', err);
     await respond({ response_type: 'ephemeral', text: `Couldn't add you to the channel: ${err.data?.error || err.message}` });
   }
 });

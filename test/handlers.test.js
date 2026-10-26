@@ -103,20 +103,20 @@ test('non-owner cannot accept or decline requests', async () => {
   assert.equal(store.getJoinRequest(req.id).status, 'pending');
 });
 
-test('/join adds the user to the public channel', async () => {
+test('/joinc adds the user to the public channel', async () => {
   const client = fakeClient();
   const result = await handlers.handleJoinPublic({ command: cmd('UFRIEND'), client, config });
   assert.match(result.text, /added to the public channel/);
   assert.deepEqual(client.calls.invited, [{ channel: 'CPUBLIC', users: 'UFRIEND' }]);
 });
 
-test('/join is friendly when the user is already in the channel', async () => {
+test('/joinc is friendly when the user is already in the channel', async () => {
   const client = fakeClient({ inviteError: Object.assign(new Error('already'), { data: { error: 'already_in_channel' } }) });
   const result = await handlers.handleJoinPublic({ command: cmd('UFRIEND'), client, config });
   assert.match(result.text, /already in the public channel/);
 });
 
-test('/join rethrows unexpected Slack errors', async () => {
+test('/joinc rethrows unexpected Slack errors', async () => {
   const client = fakeClient({ inviteError: Object.assign(new Error('nope'), { data: { error: 'channel_not_found' } }) });
   await assert.rejects(handlers.handleJoinPublic({ command: cmd('UFRIEND'), client, config }), /nope/);
 });

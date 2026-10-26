@@ -9,7 +9,7 @@ features:
     - command: /joinprvt
       description: Request to join the private channel
       should_escape: false
-    - command: /join
+    - command: /joinc
       description: Join the public channel
       should_escape: false
     - command: /movierequest
