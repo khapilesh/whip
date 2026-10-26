@@ -132,7 +132,24 @@ async function handleMovieRequest({ command, store }) {
   return { text: `Added "${request.title}" to the movie request list. 🎬` };
 }
 
+/** Strip Slack mention tokens like <@U123> from message text. */
+function stripMentions(text) {
+  return (text || '').replace(/<@[A-Z0-9]+>/g, '').trim();
+}
+
+/** /ask <question> - ask the tutor. Conversation is kept per user and channel. */
+async function handleAsk({ command, tutor }) {
+  const question = (command.text || '').trim();
+  if (!question) {
+    return { text: 'Usage: `/ask <your question>`. I will guide you to the answer rather than just giving it.' };
+  }
+  const reply = await tutor.respond(`ask:${command.channel_id}:${command.user_id}`, question);
+  return { text: reply };
+}
+
 module.exports = {
+  handleAsk,
+  stripMentions,
   handleJoinPrivate,
   handleJoinPrivateDecision,
   handleJoinPublic,

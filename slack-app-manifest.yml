@@ -16,6 +16,14 @@ features:
       description: Request a movie (or "list" to see requests)
       usage_hint: "<movie title>"
       should_escape: false
+    - command: /ask
+      description: Ask the AI tutor (it guides you to the answer)
+      usage_hint: "<your question>"
+      should_escape: false
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.im
 oauth_config:
   scopes:
     bot:
@@ -24,6 +32,10 @@ oauth_config:
       - channels:manage
       - groups:write
       - users:read
+      - app_mentions:read
+      - im:history
+      - im:read
+      - im:write
 settings:
   interactivity:
     is_enabled: true

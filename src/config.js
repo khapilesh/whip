@@ -19,6 +19,8 @@ function loadConfig(env = process.env) {
     publicChannelId: required(env, 'PUBLIC_CHANNEL_ID'),
     privateChannelId: env.PRIVATE_CHANNEL_ID || undefined,
     dataFile: env.DATA_FILE || 'data/db.json',
+    anthropicApiKey: required(env, 'ANTHROPIC_API_KEY'),
+    anthropicModel: env.ANTHROPIC_MODEL || 'claude-sonnet-4-5',
   };
 }
 

@@ -3,10 +3,15 @@
 const { App } = require('@slack/bolt');
 const { loadConfig } = require('./config');
 const { Store } = require('./store');
+const { createAiClient } = require('./ai');
+const { Tutor } = require('./tutor');
 const handlers = require('./handlers');
 
 const config = loadConfig();
 const store = new Store(config.dataFile);
+const tutor = new Tutor(
+  createAiClient({ apiKey: config.anthropicApiKey, model: config.anthropicModel })
+);
 
 const app = new App({
   token: config.botToken,
@@ -66,7 +71,55 @@ app.command('/movierequest', async ({ command, ack, client, respond }) => {
   }
 });
 
+app.command('/ask', async ({ command, ack, respond }) => {
+  await ack();
+  try {
+    const result = await handlers.handleAsk({ command, tutor });
+    await respond({ response_type: 'ephemeral', text: result.text });
+  } catch (err) {
+    console.error('/ask failed:', err);
+    await respond({ response_type: 'ephemeral', text: 'The tutor is unavailable right now. Please try again in a moment.' });
+  }
+});
+
+/** Shared path for @mentions and DMs: reply in a thread, keeping per-thread history. */
+async function answerInThread({ client, channel, thread_ts, text }) {
+  const cleaned = handlers.stripMentions(text);
+  const key = `thread:${channel}:${thread_ts}`;
+  try {
+    const reply = await tutor.respond(key, cleaned);
+    await client.chat.postMessage({ channel, thread_ts, text: reply });
+  } catch (err) {
+    console.error('tutor reply failed:', err);
+    await client.chat.postMessage({
+      channel,
+      thread_ts,
+      text: 'The tutor is unavailable right now. Please try again in a moment.',
+    });
+  }
+}
+
+app.event('app_mention', async ({ event, client }) => {
+  await answerInThread({
+    client,
+    channel: event.channel,
+    thread_ts: event.thread_ts || event.ts,
+    text: event.text,
+  });
+});
+
+app.event('message', async ({ event, client }) => {
+  // Only human DMs. Skip bot messages, edits, deletions, and other subtypes.
+  if (event.channel_type !== 'im' || event.subtype || event.bot_id) return;
+  await answerInThread({
+    client,
+    channel: event.channel,
+    thread_ts: event.thread_ts || event.ts,
+    text: event.text,
+  });
+});
+
 (async () => {
   await app.start();
-  console.log('⚡️ whip Slack bot is running (Socket Mode)');
+  console.log('whip Slack bot is running (Socket Mode)');
 })();
