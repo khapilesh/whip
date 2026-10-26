@@ -1,0 +1,20 @@
+{
+  "name": "whip",
+  "version": "1.0.0",
+  "description": "Slack bot with /joinprvt, /join and /movierequest commands",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khapilesh/whip.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@slack/bolt": "^5.1.0",
+    "dotenv": "^18.0.9"
+  }
+}
