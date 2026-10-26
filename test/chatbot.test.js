@@ -26,8 +26,10 @@ test('rudeness level escalates with wrong answers and caps at 3', () => {
 
 test('system prompt uses the tone for the current level', () => {
   assert.match(buildSystemPrompt(0), new RegExp(TONE_LEVELS[0].slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  assert.match(buildSystemPrompt(3), /Very rude|very rude/);
-  assert.doesNotMatch(buildSystemPrompt(0), /Socratic|hint/i);
+  assert.match(buildSystemPrompt(3), /Very rude/);
+  assert.match(buildSystemPrompt(0), /schoolmaster/);
+  assert.match(buildSystemPrompt(0), /Make the user work for their answers/);
+  assert.match(buildSystemPrompt(0), /Never do their homework/);
 });
 
 test('parseReply reads JSON and falls back to plain text', () => {

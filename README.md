@@ -7,19 +7,19 @@ A Slack bot with three slash commands:
 | `/joinprvt` | Sends you (the owner) a DM with **Accept** / **Decline** buttons. On accept, the requester is invited to your private channel. |
 | `/join` | Adds the user who ran it to your public channel. |
 | `/movierequest <title>` | Adds a movie to a shared request list. `/movierequest` or `/movierequest list` shows the list. Duplicates are ignored. |
-| `/ask <question>` | Asks the AI chatbot a question. |
+| `/ask <question>` | Asks the chatbot a question. |
 
 The chatbot also answers **direct messages** to the bot and **@mentions** in channels. It replies in a thread and remembers the conversation in that thread.
 
 ### How the attitude works
 
-The chatbot is a general-purpose assistant with a rude streak. Its tone depends on how many wrong answers you have given in that conversation:
+The chatbot is a general-purpose assistant styled as a strict, old-fashioned schoolmaster (the name is a nod to the whip). It makes you work for answers: it asks for an attempt and offers hints before giving the full answer. Its tone depends on how many wrong answers you have given in that conversation:
 
 | Wrong answers so far | Tone |
 | --- | --- |
-| 0 | Friendly |
-| 1 | Slightly snarky |
-| 2–3 | Rude |
+| 0 | Stern but courteous |
+| 1 | Snappish |
+| 2–3 | Rude and scolding |
 | 4+ | Very rude |
 
 The model judges whether each of your messages is a wrong answer to a question the bot asked. Tone only changes on the reply after a wrong answer is counted. The count and conversation memory live in process memory and reset when the bot restarts.
