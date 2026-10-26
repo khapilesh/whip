@@ -20,10 +20,6 @@ features:
       description: Ask the chatbot a question
       usage_hint: "<your question>"
       should_escape: false
-  event_subscriptions:
-    bot_events:
-      - app_mention
-      - message.im
 oauth_config:
   scopes:
     bot:
@@ -37,6 +33,10 @@ oauth_config:
       - im:read
       - im:write
 settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.im
   interactivity:
     is_enabled: true
   socket_mode_enabled: true
