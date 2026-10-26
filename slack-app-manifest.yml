@@ -17,7 +17,7 @@ features:
       usage_hint: "<movie title>"
       should_escape: false
     - command: /ask
-      description: Ask the AI tutor (it guides you to the answer)
+      description: Ask the chatbot a question
       usage_hint: "<your question>"
       should_escape: false
   event_subscriptions:

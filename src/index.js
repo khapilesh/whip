@@ -4,12 +4,12 @@ const { App } = require('@slack/bolt');
 const { loadConfig } = require('./config');
 const { Store } = require('./store');
 const { createAiClient } = require('./ai');
-const { Tutor } = require('./tutor');
+const { Chatbot } = require('./chatbot');
 const handlers = require('./handlers');
 
 const config = loadConfig();
 const store = new Store(config.dataFile);
-const tutor = new Tutor(
+const chatbot = new Chatbot(
   createAiClient({ apiKey: config.anthropicApiKey, model: config.anthropicModel })
 );
 
@@ -74,11 +74,11 @@ app.command('/movierequest', async ({ command, ack, client, respond }) => {
 app.command('/ask', async ({ command, ack, respond }) => {
   await ack();
   try {
-    const result = await handlers.handleAsk({ command, tutor });
+    const result = await handlers.handleAsk({ command, chatbot });
     await respond({ response_type: 'ephemeral', text: result.text });
   } catch (err) {
     console.error('/ask failed:', err);
-    await respond({ response_type: 'ephemeral', text: 'The tutor is unavailable right now. Please try again in a moment.' });
+    await respond({ response_type: 'ephemeral', text: 'The chatbot is unavailable right now. Please try again in a moment.' });
   }
 });
 
@@ -87,14 +87,14 @@ async function answerInThread({ client, channel, thread_ts, text }) {
   const cleaned = handlers.stripMentions(text);
   const key = `thread:${channel}:${thread_ts}`;
   try {
-    const reply = await tutor.respond(key, cleaned);
+    const reply = await chatbot.respond(key, cleaned);
     await client.chat.postMessage({ channel, thread_ts, text: reply });
   } catch (err) {
-    console.error('tutor reply failed:', err);
+    console.error('chatbot reply failed:', err);
     await client.chat.postMessage({
       channel,
       thread_ts,
-      text: 'The tutor is unavailable right now. Please try again in a moment.',
+      text: 'The chatbot is unavailable right now. Please try again in a moment.',
     });
   }
 }

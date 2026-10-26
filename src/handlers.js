@@ -137,13 +137,13 @@ function stripMentions(text) {
   return (text || '').replace(/<@[A-Z0-9]+>/g, '').trim();
 }
 
-/** /ask <question> - ask the tutor. Conversation is kept per user and channel. */
-async function handleAsk({ command, tutor }) {
+/** /ask <question> - ask the chatbot. Conversation is kept per user and channel. */
+async function handleAsk({ command, chatbot }) {
   const question = (command.text || '').trim();
   if (!question) {
-    return { text: 'Usage: `/ask <your question>`. I will guide you to the answer rather than just giving it.' };
+    return { text: 'Usage: `/ask <your question>`' };
   }
-  const reply = await tutor.respond(`ask:${command.channel_id}:${command.user_id}`, question);
+  const reply = await chatbot.respond(`ask:${command.channel_id}:${command.user_id}`, question);
   return { text: reply };
 }
 
