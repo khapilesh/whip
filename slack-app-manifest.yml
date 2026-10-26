@@ -1,0 +1,43 @@
+display_information:
+  name: whip
+  description: Join requests and movie requests
+features:
+  bot_user:
+    display_name: whip
+    always_online: true
+  slash_commands:
+    - command: /joinprvt
+      description: Request to join the private channel
+      should_escape: false
+    - command: /join
+      description: Join the public channel
+      should_escape: false
+    - command: /movierequest
+      description: Request a movie (or "list" to see requests)
+      usage_hint: "<movie title>"
+      should_escape: false
+    - command: /ask
+      description: Ask the chatbot a question
+      usage_hint: "<your question>"
+      should_escape: false
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.im
+oauth_config:
+  scopes:
+    bot:
+      - commands
+      - chat:write
+      - channels:manage
+      - groups:write
+      - users:read
+      - app_mentions:read
+      - im:history
+      - im:read
+      - im:write
+settings:
+  interactivity:
+    is_enabled: true
+  socket_mode_enabled: true
+  org_deploy_enabled: false
